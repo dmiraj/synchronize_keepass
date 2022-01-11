@@ -23,7 +23,7 @@ case $@ in
 				--perms \
 				--rsh="ssh -p 6897" \
 				$local_database $server:$remote_database
-			if $?; then
+			if [ $? = '0' ]; then
 				echo "Success !"
 			fi
 
@@ -34,7 +34,7 @@ case $@ in
 				--perms \
 				--rsh="ssh -p 6897" \
 				$server:$remote_database $local_database
-			if $?; then
+			if [ $?  = '0']; then
 				echo "Success !"
 			fi
 		else
