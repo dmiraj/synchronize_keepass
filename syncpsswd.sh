@@ -15,7 +15,6 @@ case $@ in
 		# Once the service unit stops (i.e: its dependencies fail) then the file under /etc/cron.d will be deleted.
 		remote_mod_time=$(ssh -p 6897 $server stat $remote_database | awk '/Modify/ { print $2 " " $3 }')
 		local_mod_time=$(stat $local_database | awk '/Modify/ { print $2 " " $3 }')
-		echo $local_mod_time
 		if [[ "$remote_mod_time" < "$local_mod_time" ]]; then
 			echo "Updating the remote databse on berhl"
 			rsync --times \
@@ -23,7 +22,7 @@ case $@ in
 				--perms \
 				--rsh="ssh -p 6897" \
 				$local_database $server:$remote_database
-			if $?; then
+			if [ $? = '0' ]; then
 				echo "Success !"
 			fi
 
@@ -34,7 +33,7 @@ case $@ in
 				--perms \
 				--rsh="ssh -p 6897" \
 				$server:$remote_database $local_database
-			if $?; then
+			if [ $?  = '0']; then
 				echo "Success !"
 			fi
 		else
